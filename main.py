@@ -21,6 +21,7 @@ def prepare_folder(paths):
     except FileExistsError:
         pass
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("nhentai_no")

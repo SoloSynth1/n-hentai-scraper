@@ -63,12 +63,13 @@ class Downloader:
         self.image_link = image_link
         self.target_path = target_path
         self.image = None
+        self.TIMEOUT = 10
 
     def download(self):
         print("Downloading {}...".format(self.image_link), end="")
         while not self.image:
             try:
-                response = requests.get(self.image_link)
+                response = requests.get(self.image_link, timeout=self.TIMEOUT)
                 if response.status_code < 400:
                     self.image = response.content
                     break
