@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-class Scraper:
+
+class MetadataScraper:
 
     def __init__(self):
         self.sess = requests.session()
@@ -9,7 +10,7 @@ class Scraper:
         self.nhentai_no = None
 
 
-    def scrape(self, nhentai_no):
+    def get_info(self, nhentai_no):
         self.nhentai_no = nhentai_no
         try:
             self.metadata = self.get_gallery_metadata()
@@ -54,3 +55,27 @@ class Scraper:
         else:
             print("failed to download image")
             return None
+
+
+class Downloader:
+
+    def __init__(self, image_link, target_path):
+        self.image_link = image_link
+        self.target_path = target_path
+        self.image = None
+
+    def download(self):
+        print("Downloading {}...".format(self.image_link), end="")
+        while not self.image:
+            response = requests.get(self.image_link)
+            if response.status_code < 400:
+                self.image = response.content
+            else:
+                print("Retrying...")
+        print("Done.")
+
+    def save(self):
+        print("Saving image to {}...".format(self.target_path), end="")
+        with open(self.target_path, 'wb') as f:
+            f.write(self.image)
+        print("Done.")
