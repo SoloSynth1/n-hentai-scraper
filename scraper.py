@@ -67,11 +67,14 @@ class Downloader:
     def download(self):
         print("Downloading {}...".format(self.image_link), end="")
         while not self.image:
-            response = requests.get(self.image_link)
-            if response.status_code < 400:
-                self.image = response.content
-            else:
-                print("Retrying...")
+            try:
+                response = requests.get(self.image_link)
+                if response.status_code < 400:
+                    self.image = response.content
+                    break
+            except:
+                pass
+            print("Retrying...")
         print("Done.")
 
     def save(self):

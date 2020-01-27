@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from metadatascraper import MetadataScraper, Downloader
+from scraper import MetadataScraper, Downloader
 
 download_base_paths = [".", "data"]
 
