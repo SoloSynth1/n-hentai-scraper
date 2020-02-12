@@ -1,10 +1,16 @@
+import time
 import requests
 from bs4 import BeautifulSoup
 
-
-class MetadataScraper:
+class Requester:
 
     def __init__(self):
+        self.POLITENESS = 1
+
+class MetadataScraper(Requester):
+
+    def __init__(self):
+        super().__init__()
         self.sess = requests.session()
         self.url = "https://nhentai.net/g/{}"
         self.nhentai_no = None
@@ -30,17 +36,24 @@ class MetadataScraper:
 
     def get_gallery_metadata(self):
         metadata = {}
-        response = self.sess.get(self.url.format(self.nhentai_no), headers=None)
-        print("metadata response code: {}".format(response.status_code))
-        soup = BeautifulSoup(response.text, 'lxml')
-        info = soup.find(id="info")
-        title_jp = info.find('h2')
-        title_en = info.find('h1')
-        if title_jp:
-            metadata["title"] = title_jp.text
-        else:
-            metadata["title"] = title_en.text
-        metadata["pages"] = int([x.text for x in info.find_all('div') if ' pages' in x.text][0].split(' ')[0])
+        while not metadata:
+            try:
+                response = self.sess.get(self.url.format(self.nhentai_no), headers=None)
+                print("metadata response code: {}".format(response.status_code))
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.text, 'lxml')
+                    info = soup.find(id="info")
+                    title_jp = info.find('h2')
+                    title_en = info.find('h1')
+                    if title_jp:
+                        metadata["title"] = title_jp.text
+                    else:
+                        metadata["title"] = title_en.text
+                    metadata["pages"] = int([x.text for x in info.find_all('div') if ' pages' in x.text][0].split(' ')[0])
+            except:
+                pass
+            print("Retrying...")
+            time.sleep(self.POLITENESS)
         return metadata
 
     def construct_page_links(self):
@@ -64,9 +77,10 @@ class MetadataScraper:
             return None
 
 
-class Downloader:
+class Downloader(Requester):
 
     def __init__(self, image_link, target_path):
+        super().__init__()
         self.image_link = image_link
         self.target_path = target_path
         self.response = None
@@ -82,7 +96,8 @@ class Downloader:
                     self.image = self.response.content
             except:
                 pass
-                print("Retrying...")
+            print("Retrying...")
+            time.sleep(self.POLITENESS)
         print("Download Complete.")
 
     def response_is_valid(self):
