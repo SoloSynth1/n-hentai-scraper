@@ -7,6 +7,10 @@ class Requester:
     def __init__(self):
         self.POLITENESS = 1
 
+    def retry(self):
+        print("Retrying...")
+        time.sleep(self.POLITENESS)
+
 class MetadataScraper(Requester):
 
     def __init__(self):
@@ -50,10 +54,10 @@ class MetadataScraper(Requester):
                     else:
                         metadata["title"] = title_en.text
                     metadata["pages"] = int([x.text for x in info.find_all('div') if ' pages' in x.text][0].split(' ')[0])
+                    break
             except:
                 pass
-            print("Retrying...")
-            time.sleep(self.POLITENESS)
+            self.retry()
         return metadata
 
     def construct_page_links(self):
@@ -94,10 +98,10 @@ class Downloader(Requester):
                 self.response = requests.get(self.image_link, timeout=self.TIMEOUT)
                 if self.response_is_valid():
                     self.image = self.response.content
+                    break
             except:
                 pass
-            print("Retrying...")
-            time.sleep(self.POLITENESS)
+            self.retry()
         print("Download Complete.")
 
     def response_is_valid(self):
