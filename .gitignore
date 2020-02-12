@@ -3,3 +3,4 @@ data/
 .idea/
 __pycache__/
 nohup.out
+screenlog.*
