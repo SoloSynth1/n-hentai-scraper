@@ -22,15 +22,14 @@ class Requester:
                 self.response = self.sess.get(url, timeout=self.TIMEOUT)
                 if self.response_is_valid(check_content_length):
                     break
-            except:
+            except Exception as e:
                 pass
             self.response = None
             self.retry()
         print("Valid response received.")
 
     def response_is_valid(self, check_content_length=False):
-        assert self.response
-        if self.response.status_code == 200:
+        if self.response:
             headers = self.response.headers
             content = self.response.content
             if "Content-Length" in headers.keys():
@@ -50,6 +49,8 @@ class Requester:
                 else:
                     print("Assuming good response...")
                     return True
+        else:
+            print("Returned non-OK status code: {}".format(self.response.status_code))
         return False
 
 
