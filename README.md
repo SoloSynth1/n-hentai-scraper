@@ -6,7 +6,7 @@
 
 ## Description
 
-This is a simple downloader for nhentai.net galleries.
+This is a simple downloader for [nhentai.net](https://nhentai.net) galleries.
 
 The downloaded galleries are currently hardcoded to store in `./data` directory.
 
