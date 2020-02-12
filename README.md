@@ -6,7 +6,9 @@
 
 ## Description
 
-This is a simple downloader for nhentai.net galleries. The downloaded galleries are currently hardcoded to store in `./data` directory.
+This is a simple downloader for nhentai.net galleries.
+
+The downloaded galleries are currently hardcoded to store in `./data` directory.
 
 Features:
 - Just give the number and start download right away
@@ -34,4 +36,4 @@ Example: `./download.sh 123824 135860 141768 153521 171136 171211 186386 204241 
 
 ## Bug Report & Suggestions
 
-Kindly raise an issue in this repository. Not guaranteed to respond tho.
+Kindly raise an issue in this repository. Not guaranteed to respond. Feel free to fork and improve.
