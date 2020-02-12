@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 class Requester:
 
     def __init__(self):
-        self.POLITENESS = 1
+        self.POLITENESS = 3
         self.TIMEOUT = 10
         self.sess = requests.session()
         self.response = None
