@@ -16,23 +16,15 @@ Listed in `requirements.txt`.
 
 ### Single gallery download
 
-Format:
+Format: `python main.py {gallery-id}`
 
-`python main.py {gallery-id}`
-
-For example:
-
-`python main.py 177013`
+Example: `python main.py 177013`
 
 ### Multiple gallery download at the same time (*nix OS only)
 
-Format:
+Format: `./download.sh {gallery-id}...`
 
-`./download.sh {gallery-id}...`
-
-For example:
-
-`./download.sh 123824 135860 141768 153521 171136 171211 186386 204241 218812 242376 297575`
+Example: `./download.sh 123824 135860 141768 153521 171136 171211 186386 204241 218812 242376 297575`
 
 ## Bug Report & Suggestions
 
