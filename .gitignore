@@ -2,3 +2,4 @@ venv/
 data/
 .idea/
 __pycache__/
+nohup.out
