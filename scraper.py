@@ -19,7 +19,8 @@ class MetadataScraper:
             return self.metadata, self.create_image_generator()
         except Exception as e:
             print("exception occurred when retrieving metadata.")
-            return False
+            print("error info: {}".format(e))
+            return None, None
 
     def create_image_generator(self):
         for page_link in self.page_links:

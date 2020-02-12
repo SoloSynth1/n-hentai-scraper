@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 for arg; do
-	nohup bash -c "python main.py $arg" &
+	screen -dm python main.py $arg ;
+	sleep 1;
 done
