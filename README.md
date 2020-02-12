@@ -18,7 +18,9 @@ Features:
 
 ## Dependencies
 
-Listed in `requirements.txt`.
+Python3.6+.
+
+pip dependencies listed in `requirements.txt`.
 
 ## How to use
 
