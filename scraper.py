@@ -31,9 +31,15 @@ class MetadataScraper:
     def get_gallery_metadata(self):
         metadata = {}
         response = self.sess.get(self.url.format(self.nhentai_no), headers=None)
+        print("metadata response code: {}".format(response.status_code))
         soup = BeautifulSoup(response.text, 'lxml')
         info = soup.find(id="info")
-        metadata["title"] = info.find('h2').text
+        title_jp = info.find('h2')
+        title_en = info.find('h1')
+        if title_jp:
+            metadata["title"] = title_jp.text
+        else:
+            metadata["title"] = title_en.text
         metadata["pages"] = int([x.text for x in info.find_all('div') if ' pages' in x.text][0].split(' ')[0])
         return metadata
 
@@ -63,21 +69,39 @@ class Downloader:
     def __init__(self, image_link, target_path):
         self.image_link = image_link
         self.target_path = target_path
+        self.response = None
         self.image = None
         self.TIMEOUT = 10
 
     def download(self):
-        print("Downloading {}...".format(self.image_link), end="")
+        print("Downloading {}...".format(self.image_link))
         while not self.image:
             try:
-                response = requests.get(self.image_link, timeout=self.TIMEOUT)
-                if response.status_code < 400:
-                    self.image = response.content
-                    break
+                self.response = requests.get(self.image_link, timeout=self.TIMEOUT)
+                if self.response_is_valid():
+                    self.image = self.response.content
             except:
                 pass
-            print("Retrying...")
-        print("Done.")
+                print("Retrying...")
+        print("Download Complete.")
+
+    def response_is_valid(self):
+        assert self.response
+        if self.response.status_code == 200:
+            headers = self.response.headers
+            content = self.response.content
+            if "Content-Length" in headers.keys():
+                content_length = int(headers["Content-Length"])
+                actual_content_length = len(content)
+                print("Reported content length: {}, Actual content length: {}".format(content_length, actual_content_length))
+                if content_length == actual_content_length:
+                    print("Response is OK")
+                    return True
+                else:
+                    print("content length not matching")
+            else:
+                print("Header doesn't contain content length information. Assuming the bad response...")
+        return False
 
     def save(self):
         print("Saving image to {}...".format(self.target_path), end="")

@@ -50,12 +50,15 @@ if __name__ == "__main__":
     print("Downloading gallery id#{}...".format(nhentai_no))
     meta_scraper = MetadataScraper()
     metadata, image_generator = meta_scraper.get_info(nhentai_no)
-    print("Title: {}\t Pages: {}".format(metadata['title'], metadata['pages']))
-    download_paths = download_base_paths+[metadata['title']]
-    prepare_folder(download_paths)
+    if metadata and image_generator:
+        print("Title: {}\t Pages: {}".format(metadata['title'], metadata['pages']))
+        download_paths = download_base_paths+[metadata['title']]
+        prepare_folder(download_paths)
 
-    for image_link, image in image_generator:
-        path = construct_path(download_paths+[image_link.split("/")[-1]])
-        downloader = Downloader(image_link, path)
-        downloader.download()
-        downloader.save()
+        for image_link, image in image_generator:
+            path = construct_path(download_paths+[image_link.split("/")[-1]])
+            downloader = Downloader(image_link, path)
+            downloader.download()
+            downloader.save()
+    else:
+        print("no metadata is retrieved. exiting...")
