@@ -8,6 +8,12 @@
 
 This is a simple downloader for nhentai.net galleries. The downloaded galleries are currently hardcoded to store in `./data` directory.
 
+Features:
+- Just give the number and start download right away
+- Download multiple doujishis at a single command!
+- Downloaded images are organized by their titles
+- Check, prevent & reject corrupted downloads
+
 ## Dependencies
 
 Listed in `requirements.txt`.
