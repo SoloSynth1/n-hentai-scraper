@@ -94,8 +94,8 @@ class MetadataScraper(Requester):
         return page_links
 
     def get_image_link(self, page_link):
-        response = self.sess.get(page_link)
-        soup = BeautifulSoup(response.text, 'lxml')
+        self.get(page_link)
+        soup = BeautifulSoup(self.response.text, 'lxml')
         image_container = soup.find(id="image-container")
         image_link = image_container.find('img')['src']
         return image_link
