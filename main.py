@@ -1,5 +1,6 @@
 import os
 import argparse
+import multiprocessing as mp
 
 from scraper import MetadataScraper, Downloader
 
@@ -55,10 +56,16 @@ if __name__ == "__main__":
         download_paths = download_base_paths+[metadata['title']]
         prepare_folder(download_paths)
 
+        processes = []
         for image_link in image_generator:
-            path = construct_path(download_paths+[image_link.split("/")[-1]])
+            path = construct_path(download_paths + [image_link.split("/")[-1]])
             downloader = Downloader(image_link, path)
-            downloader.download()
-            downloader.save()
+            processes.append(mp.Process(target=downloader.execute))
+
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
+
     else:
         print("no metadata is retrieved. exiting...")
