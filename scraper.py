@@ -122,3 +122,8 @@ class Downloader(Requester):
         with open(self.target_path, 'wb') as f:
             f.write(self.image)
         print("Done.")
+
+    def execute(self):
+        # wrapper function
+        self.download()
+        self.save()
