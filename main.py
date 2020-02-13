@@ -1,6 +1,8 @@
 import os
 import argparse
 
+from gooey import Gooey
+
 from scraper import MetadataScraper, Downloader
 
 download_base_paths = [".", "data"]
@@ -40,7 +42,8 @@ def prepare_folder(paths):
         pass
 
 
-if __name__ == "__main__":
+@Gooey
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("nhentai_no")
 
@@ -52,13 +55,17 @@ if __name__ == "__main__":
     metadata, image_generator = meta_scraper.get_info()
     if metadata and image_generator:
         print("Title: {}\t Pages: {}".format(metadata['title'], metadata['pages']))
-        download_paths = download_base_paths+[metadata['title']]
+        download_paths = download_base_paths + [metadata['title']]
         prepare_folder(download_paths)
 
         for image_link in image_generator:
-            path = construct_path(download_paths+[image_link.split("/")[-1]])
+            path = construct_path(download_paths + [image_link.split("/")[-1]])
             downloader = Downloader(image_link, path)
             downloader.download()
             downloader.save()
     else:
         print("no metadata is retrieved. exiting...")
+
+
+if __name__ == "__main__":
+    main()
