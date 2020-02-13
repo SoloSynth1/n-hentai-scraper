@@ -24,7 +24,7 @@ pip dependencies listed in `requirements.txt`.
 
 ## How to install
 
-1. Get Python.
+1. [Get Python](https://www.python.org/downloads/).
 2. (Optional) Create a virtual environment.
 3. Use `pip install -r requirements.txt` to download all dependencies. 
 4. ??????
