@@ -22,6 +22,14 @@ Python3.6+.
 
 pip dependencies listed in `requirements.txt`.
 
+## How to install
+
+1. Get Python.
+2. (Optional) Create a virtual environment.
+3. Use `pip install -r requirements.txt` to download all dependencies. 
+4. ??????
+5. Profit
+
 ## How to use
 
 ### Single gallery download
