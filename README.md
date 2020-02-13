@@ -1,6 +1,6 @@
 # n-hentai-scraper
 
-![n-hentai-scraper](./logo.svg)
+![n-hentai-scraper](./logo.png)
 
 *"I did this for research purposes"*
 
