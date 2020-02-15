@@ -2,6 +2,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+from filesystem import construct_path
 
 class Requester:
 
@@ -65,16 +66,15 @@ class MetadataScraper(Requester):
             self.metadata = self.get_gallery_metadata()
             self.page_links = self.construct_page_links()
             print("metadata retrieved sucessfully")
-            return self.metadata, self.create_image_generator()
+            return self.metadata, self.create_link_generator()
         except Exception as e:
             print("exception occurred when retrieving metadata.")
             print("error info: {}".format(e))
             return None, None
 
-    def create_image_generator(self):
+    def create_link_generator(self):
         for page_link in self.page_links:
-            image_link = self.get_image_link(page_link)
-            yield image_link
+            yield page_link
 
     def get_gallery_metadata(self):
         metadata = {}
@@ -94,22 +94,22 @@ class MetadataScraper(Requester):
         page_links = [self.url + "/{}".format(i + 1) for i in range(self.metadata['pages'])]
         return page_links
 
-    def get_image_link(self, page_link):
-        self.get(page_link)
-        soup = BeautifulSoup(self.response.text, 'lxml')
-        image_container = soup.find(id="image-container")
-        image_link = image_container.find('img')['src']
-        return image_link
-
 
 class Downloader(Requester):
 
-    def __init__(self, image_link, target_path):
+    def __init__(self, page_link, base_path):
         super().__init__()
-        self.image_link = image_link
-        self.target_path = target_path
+        self.page_link = page_link
+        self.base_path = base_path
+        self.image_link = None
         self.image = None
         self.TIMEOUT = 10
+
+    def get_image_link(self):
+        self.get(self.page_link)
+        soup = BeautifulSoup(self.response.text, 'lxml')
+        image_container = soup.find(id="image-container")
+        self.image_link = image_container.find('img')['src']
 
     def download(self):
         print("Downloading {}...".format(self.image_link))
@@ -118,12 +118,14 @@ class Downloader(Requester):
         print("Download Complete.")
 
     def save(self):
-        print("Saving image to {}...".format(self.target_path), end="")
-        with open(self.target_path, 'wb') as f:
+        target_path = construct_path(self.base_path + [self.image_link.split("/")[-1]])
+        print("Saving image to {}...".format(target_path), end="")
+        with open(target_path, 'wb') as f:
             f.write(self.image)
         print("Done.")
 
     def execute(self):
         # wrapper function
+        self.get_image_link()
         self.download()
         self.save()
