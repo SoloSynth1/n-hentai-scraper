@@ -10,7 +10,7 @@ download_base_paths = [".", "data"]
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("nhentai_no")
-    parser.add_argument("-c", "--concurrent_count", metavar='n', type=int, default=10)
+    parser.add_argument("-c", "--concurrent_count", metavar='n', type=int, default=20)
 
     args = parser.parse_args()
 
