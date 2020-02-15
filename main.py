@@ -7,6 +7,10 @@ from filesystem import prepare_folder
 download_base_paths = [".", "data"]
 
 
+def download(downloader):
+    downloader.execute()
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("nhentai_no")
@@ -25,12 +29,10 @@ def main():
         download_paths = download_base_paths + [metadata['title']]
         prepare_folder(download_paths)
 
-        downloader_args = []
-        for page_link in link_generator:
-            downloader_args.append((page_link, download_paths))
+        downloaders = [Downloader(page_link, download_paths) for page_link in link_generator]
 
         with mp.Pool(concurrent_count) as p:
-            p.starmap(Downloader, downloader_args)
+            p.map(download, downloaders)
 
     else:
         print("no metadata is retrieved. exiting...")
