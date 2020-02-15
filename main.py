@@ -1,8 +1,5 @@
-import os
 import argparse
 import multiprocessing as mp
-
-from gooey import Gooey
 
 from scraper import MetadataScraper, Downloader
 from filesystem import prepare_folder
@@ -10,11 +7,10 @@ from filesystem import prepare_folder
 download_base_paths = [".", "data"]
 
 
-@Gooey
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("nhentai_no")
-    parser.add_argument("-c", "--concurrent_count", metavar='n', type=int, default=10)
+    parser.add_argument("-c", metavar='THREAD_COUNT', type=int, default=10)
 
     args = parser.parse_args()
 
