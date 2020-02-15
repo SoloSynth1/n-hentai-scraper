@@ -23,7 +23,11 @@ class Requester:
         print("Retry #{}...".format(self.retries))
         time.sleep(max(gauss(mu=self.POLITENESS_MEAN * self.retries, sigma=self.POLITENESS_DEV * self.retries), 0))
 
+    def reset_retries(self):
+        self.retries = 0
+
     def get(self, url, check_content_length=False):
+        self.reset_retries()
         print("Requesting {}...".format(url))
         while True:
             try:
