@@ -108,6 +108,7 @@ class Downloader(Requester):
         self.image_link = None
         self.image = None
         self.TIMEOUT = 10
+        self.execute()
 
     def get_image_link(self):
         self.get(self.page_link)
