@@ -15,10 +15,13 @@ class Requester:
         self.TIMEOUT = 10
         self.sess = requests.session()
         self.response = None
+        self.failed_retries = 0
 
     def retry(self):
-        print("Retrying...")
-        time.sleep(max(gauss(mu=self.POLITENESS_MEAN, sigma=self.POLITENESS_DEV), 0))   # add gaussian distribution to distribute the requests
+        print("Retry #{}...".format(self.failed_retries))
+        # gaussian distribution + exponential standoff
+        exp = self.failed_retries + 1
+        time.sleep(max(gauss(mu=self.POLITENESS_MEAN ** exp, sigma=self.POLITENESS_DEV ** exp), 0))
 
     def get(self, url, check_content_length=False):
         print("Requesting {}...".format(url))
