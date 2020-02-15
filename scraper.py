@@ -1,20 +1,24 @@
 import time
 import requests
+from random import gauss
+
 from bs4 import BeautifulSoup
 
 from filesystem import construct_path
 
+
 class Requester:
 
     def __init__(self):
-        self.POLITENESS = 3
+        self.POLITENESS_MEAN = 5
+        self.POLITENESS_DEV = 1
         self.TIMEOUT = 10
         self.sess = requests.session()
         self.response = None
 
     def retry(self):
         print("Retrying...")
-        time.sleep(self.POLITENESS)
+        time.sleep(max(gauss(mu=self.POLITENESS_MEAN, sigma=self.POLITENESS_DEV), 0))   # add gaussian distribution to distribute the requests
 
     def get(self, url, check_content_length=False):
         print("Requesting {}...".format(url))
