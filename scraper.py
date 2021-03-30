@@ -1,4 +1,5 @@
 import time
+import zlib
 import requests
 from random import gauss
 
@@ -16,6 +17,15 @@ class Requester:
         self.sess = requests.session()
         self.response = None
         self.retries = 0
+        self.__config_headers()
+
+    def __config_headers(self):
+        self.sess.headers.update({
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'Accept-Encoding': 'gzip',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36',
+        })
 
     def retry(self):
         # gaussian distribution + linear increasing standoff
@@ -32,6 +42,7 @@ class Requester:
         while True:
             try:
                 self.response = self.sess.get(url, timeout=self.TIMEOUT)
+                print(zlib.decompress(self.response.content))
                 if self.response_is_valid(check_content_length):
                     break
             except Exception as e:

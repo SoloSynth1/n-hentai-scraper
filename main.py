@@ -23,19 +23,20 @@ def main():
 
     print("Downloading gallery id#{}...".format(nhentai_no))
     meta_scraper = MetadataScraper(nhentai_no)
-    metadata, link_generator = meta_scraper.get_info()
-    if metadata and link_generator:
-        print("Title: {}\t Pages: {}".format(metadata['title'], metadata['pages']))
-        download_paths = download_base_paths + [metadata['title']]
-        prepare_folder(download_paths)
+    print(meta_scraper.get_info())
+    # metadata, link_generator = meta_scraper.get_info()
+    # if metadata and link_generator:
+    #     print("Title: {}\t Pages: {}".format(metadata['title'], metadata['pages']))
+    #     download_paths = download_base_paths + [metadata['title']]
+    #     prepare_folder(download_paths)
+    #
+    #     downloaders = [Downloader(page_link, download_paths) for page_link in link_generator]
+    #
+    #     with mp.Pool(concurrent_count) as p:
+    #         p.map(download, downloaders)
 
-        downloaders = [Downloader(page_link, download_paths) for page_link in link_generator]
-
-        with mp.Pool(concurrent_count) as p:
-            p.map(download, downloaders)
-
-    else:
-        print("no metadata is retrieved. exiting...")
+    # else:
+    #     print("no metadata is retrieved. exiting...")
 
 
 if __name__ == "__main__":
